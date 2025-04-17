@@ -2,4 +2,9 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-echo "🚀 Projeto PHP puro com Docker, MySQL e Nginx funcionando!";
+use App\Routes\Api;
+use App\Controllers\HomeController;
+
+Api::get('/', [HomeController::class, 'index']);
+
+Api::dispatch();
