@@ -11,5 +11,14 @@
             "name": "newton"
         }
     ],
-    "require": {}
+    "require": {
+        "doctrine/orm": "3.3",
+        "doctrine/dbal": "^4.2",
+        "symfony/console": "^7.2",
+        "symfony/orm-pack": "^2.4",
+        "doctrine/doctrine-bundle": "^2.10",
+        "doctrine/persistence": "^3.0",
+        "doctrine/migrations": "^3.6",
+        "vlucas/phpdotenv": "^5.6"
+    }
 }

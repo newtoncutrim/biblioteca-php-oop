@@ -20,6 +20,17 @@ services:
     depends_on:
       - php
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    links:
+      - database
+    environment:
+      PMA_HOST: database
+      PMA_USER: user
+      PMA_PASSWORD: 1234
+    ports:
+      - "8586:80"
   database:
     image: mysql:8.0
     container_name: mysql
