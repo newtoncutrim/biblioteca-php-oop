@@ -8,7 +8,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 $entityManager = require_once __DIR__ . '/../src/Conf/Doctrine.php';
 
-// Aqui usamos um provider compatível com Doctrine ORM 3+
 $entityManagerProvider = new SingleManagerProvider($entityManager);
 
 ConsoleRunner::run($entityManagerProvider);

@@ -1,5 +1,6 @@
 <?php
 
+use App\Conf\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\EntityManager;
@@ -8,9 +9,6 @@ use App\Helpers\EnvHelper;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
-$dotenv->load();
-
 $isDevMode = true;
 
 $config = ORMSetup::createAttributeMetadataConfiguration(
@@ -18,12 +16,13 @@ $config = ORMSetup::createAttributeMetadataConfiguration(
     $isDevMode,
 );
 
+$conn = new Connection();
 
 $connection = DriverManager::getConnection([
-    'dbname'   => EnvHelper::get('DB_NAME'),
-    'user'     => EnvHelper::get('DB_USER'),
-    'password' => EnvHelper::get('DB_PASS'),
-    'host'     => EnvHelper::get('DB_HOST'),
+    'dbname'   => $conn->getDb(),
+    'user'     => $conn->getUser(),
+    'password' => $conn->getPass(),
+    'host'     => $conn->getHost(),
     'driver'   => 'pdo_mysql',
 ], $config);
 

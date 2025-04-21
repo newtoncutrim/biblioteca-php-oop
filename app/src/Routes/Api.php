@@ -2,6 +2,9 @@
 
 namespace App\Routes;
 
+use App\Conf\Container;
+use App\HTTP\Request;
+
 class Api
 {
     private static array $routes = [];
@@ -31,7 +34,7 @@ class Api
         self::$routes['PATCH'][$uri] = $action;
     }
 
-    public static function dispatch(): void
+    public static function dispatch(Container $container): void
     {
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'];
@@ -60,11 +63,13 @@ class Api
                 exit;
             }
 
-            $controller = new $controller();
-            $response = call_user_func([$controller, $method]);
+            // injection dependency
+            $controller = $container->resolveDependency($controller);
+            $response = call_user_func([$controller, $method], new Request());
 
             if (!is_null($response)) {
-                echo $response;
+                header('Content-Type: application/json');
+                echo json_encode($response);
             }
 
             return;

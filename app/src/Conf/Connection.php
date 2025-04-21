@@ -3,6 +3,7 @@
 namespace App\Conf;
 
 use App\Helpers\EnvHelper;
+use Dotenv\Dotenv;
 use PDO;
 
 class Connection
@@ -12,12 +13,16 @@ class Connection
     private static $pass;
     private static $db;
 
-    private function __construct() {
+    public function __construct() {
         $this->init();
     }
 
     private function init()
     {
+        // php parse .env
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+        $dotenv->load();
+
         self::$host = EnvHelper::get('DB_HOST');
         self::$user = EnvHelper::get('DB_USER');
         self::$pass = EnvHelper::get('DB_PASS');
@@ -39,5 +44,21 @@ class Connection
     public static function connect()
     {
         return new self();
+    }
+
+    public function getHost() {
+        return self::$host;
+    }
+
+    public function getUser() {
+        return self::$user;
+    }
+
+    public function getPass() {
+        return self::$pass;
+    }
+
+    public function getDb() {
+        return self::$db;
     }
 }

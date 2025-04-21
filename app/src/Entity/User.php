@@ -19,7 +19,6 @@ class User
     #[ORM\Column(type: 'string')]
     private string $type;
 
-    // Getters e Setters
     public function getId(): int {
         return $this->id;
     }
