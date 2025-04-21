@@ -4,8 +4,6 @@ use App\Conf\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\EntityManager;
-use Dotenv\Dotenv;
-use App\Helpers\EnvHelper;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
