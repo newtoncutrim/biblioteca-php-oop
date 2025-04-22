@@ -14,12 +14,31 @@ class UserController
     }
     public function index()
     {
-       return $this->userService->getUsers();
+        $users = $this->userService->getUsers();
+
+        if ($users === null) {
+            return JsonResponse::send([], 404);
+        }
+
+        return JsonResponse::send($users);
     }
 
+    public function show(int $id){
+        $user = $this->userService->getUser($id);
+
+        if ($user === null) {
+            return JsonResponse::send([], 404);
+        }
+
+        return JsonResponse::send($user);
+    }
     public function create(Request $request)
     {
         $user = $this->userService->createUser($request->all());
+
+        if ($user === null) {
+            return JsonResponse::send([], 404);
+        }
 
         return JsonResponse::send($user, 201);
     }

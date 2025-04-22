@@ -4,6 +4,8 @@ namespace App\Routes;
 
 use App\Conf\Container;
 use App\HTTP\Request;
+use Reflection;
+use ReflectionMethod;
 
 class Route
 {
@@ -37,45 +39,63 @@ class Route
     public static function dispatch(Container $container): void
     {
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $method = $_SERVER['REQUEST_METHOD'];
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
+    
+        $routes = self::$routes[$requestMethod] ?? [];
+    
+        foreach ($routes as $route => $action) {
+            // Transforma rota com parâmetro: /user/{id} => regex: /user/([\w-]+)
+            $pattern = preg_replace('#\{[\w]+\}#', '([\w-]+)', $route);
+            $pattern = "#^{$pattern}$#";
+    
+            if (preg_match($pattern, $uri, $matches)) {
+                array_shift($matches); // remove o match completo
+    
+                $controller = $action[0];
+                $method = $action[1];
+    
+                if (!class_exists($controller)) {
+                    http_response_code(404);
+                    echo json_encode(['message' => 'Controller not found']);
+                    exit;
+                }
+    
+                if (!method_exists($controller, $method)) {
+                    http_response_code(404);
+                    echo json_encode(['message' => 'Method not found']);
+                    exit;
+                }
+    
+                $controllerInstance = $container->resolveDependency($controller);
+                $request = new Request();
+                
+                $reflection = new ReflectionMethod($controller, $method);
+                $parameters = [];
+                foreach ($reflection->getParameters() as $index => $param){
+                    $type = $param->getType();
 
-        if (!isset(self::$routes[$method][$uri])) {
-            http_response_code(404);
-            echo json_encode(['message' => 'Route not found']);
-            exit;
+                    if ($type == Request::class) {
+                        $parameters[] = $request;
+                    } else {
+                        $parameters[] = array_shift($matches);
+                    }
+                }
+    
+                // Envia o Request como primeiro argumento, e os parâmetros da rota depois
+                $response = call_user_func_array([$controllerInstance, $method], $parameters);
+    
+                if (!is_null($response)) {
+                    header('Content-Type: application/json');
+                    echo json_encode($response);
+                }
+    
+                return;
+            }
         }
-
-        $action = self::$routes[$method][$uri];
-
-        if (is_array($action)) {
-            $controller = $action[0];
-            $method = $action[1];
-
-            if (!class_exists($controller)) {
-                http_response_code(404);
-                echo json_encode(['message' => 'Controller not found']);
-                exit;
-            }
-
-            if (!method_exists($controller, $method)) {
-                http_response_code(404);
-                echo json_encode(['message' => 'Method not found']);
-                exit;
-            }
-
-            // injection dependency
-            $controller = $container->resolveDependency($controller);
-            $response = call_user_func([$controller, $method], new Request());
-
-            if (!is_null($response)) {
-                header('Content-Type: application/json');
-                echo json_encode($response);
-            }
-
-            return;
-        }
-
-        http_response_code(500);
-        echo json_encode(['error' => 'Internal Server Error Routes']);
+    
+        // Nenhuma rota bateu
+        http_response_code(404);
+        echo json_encode(['message' => 'Route not found']);
     }
+    
 }

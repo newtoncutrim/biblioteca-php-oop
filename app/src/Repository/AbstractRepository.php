@@ -16,11 +16,11 @@ abstract class AbstractRepository
     }
 
     public function all(){
-
+        return $this->em->getRepository($this->entityName)->findAll();
     }
 
     public function find($id){
-
+        return $this->em->getRepository($this->entityName)->find($id);
     }
     public function create(array $data)
     {
