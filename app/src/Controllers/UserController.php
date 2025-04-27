@@ -52,4 +52,9 @@ class UserController
     {
         return $this->userService->deleteUser($id);
     }
+
+    public function cadastro()
+    {
+        require_once __DIR__ . '/../Views/Cadastro.php';
+    }
 }
