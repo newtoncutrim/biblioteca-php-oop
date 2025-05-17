@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\interfaces\InterfaceRepository;
 
-abstract class AbstractRepository
+abstract class AbstractRepository implements InterfaceRepository
 {
     protected EntityManagerInterface $em;
     protected $entityName;
@@ -16,6 +17,7 @@ abstract class AbstractRepository
     }
 
     public function all(){
+        dd($this->entityName);
         return $this->em->getRepository($this->entityName)->findAll();
     }
 
