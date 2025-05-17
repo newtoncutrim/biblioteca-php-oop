@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\interfaces\InterfaceRepository;
 
-abstract class AbstractRepository
+abstract class AbstractRepository implements InterfaceRepository
 {
     protected EntityManagerInterface $em;
     protected $entityName;

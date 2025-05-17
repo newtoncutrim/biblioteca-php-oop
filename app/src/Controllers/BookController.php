@@ -2,30 +2,56 @@
 
 namespace App\Controllers;
 
+use App\HTTP\JsonResponse;
+use App\Services\BookService;
+
 class BookController
 {
+    public function __construct(private BookService $livroSevice)
+    {
+ 
+    }
     public function index()
     {
-        echo 'BookController';
+        $livro = $this->livroSevice->getLivros();
+        dd($livro);
+        if($livro === null){
+            return JsonResponse::send('', 404);
+        }
+
+        return JsonResponse::send($livro);
     }
 
-    public function show($id)
-    {
-        echo 'BookController - ' . $id;
-    }
 
-    public function create()
-    {
-        echo 'BookController - create';
-    }
 
-    public function update($id)
-    {
-        echo 'BookController - update - ' . $id;
-    }
 
-    public function delete($id)
-    {
-        echo 'BookController - delete - ' . $id;
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

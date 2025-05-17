@@ -6,6 +6,7 @@ use App\Controllers\Auth\LoginController;
 use App\Controllers\BookController;
 use App\Controllers\LoanController;
 use App\Controllers\UserController;
+use App\Controllers\LivroController;
 
 Route::get('/', [LoginController::class, 'index']);
 Route::post('/login', [LoginController::class, 'login']);
