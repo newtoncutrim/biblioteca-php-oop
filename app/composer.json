@@ -12,7 +12,7 @@
         }
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit --testdox"
     },
     "license": "MIT",
     "authors": [

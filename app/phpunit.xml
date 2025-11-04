@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php" colors="true">
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
+
+    <!-- Diga ao PHPUnit quais arquivos fazem parte da cobertura -->
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+
+    <!-- Gere o arquivo coverage.xml (para Sonar) -->
+    <coverage processUncoveredFiles="true">
+        <report>
+            <clover outputFile="coverage.xml"/>
+        </report>
+    </coverage>
+
     <testsuites>
         <testsuite name="Projeto Tests">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
-</phpunit>
 
+</phpunit>

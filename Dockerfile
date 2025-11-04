@@ -13,6 +13,11 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install zip  # Instalar a extensão zip
 
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+# Copiar configuração do Xdebug
+COPY app/.docker/php/conf.d/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www

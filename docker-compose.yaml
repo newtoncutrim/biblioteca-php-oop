@@ -4,6 +4,10 @@ services:
     php:
         build: .
         container_name: php
+        environment:
+            XDEBUG_MODE: 'debug,coverage'
+        ports:
+            - '9000:9000'
         volumes:
             - ./app:/var/www
         depends_on:
