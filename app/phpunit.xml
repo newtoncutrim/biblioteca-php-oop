@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="tests/bootstrap.php" colors="true">
 
-    <!-- Diga ao PHPUnit quais arquivos fazem parte da cobertura -->
+    <!-- Define quais arquivos entram na cobertura -->
     <source>
         <include>
             <directory>src</directory>
         </include>
     </source>
 
-    <!-- Gere o arquivo coverage.xml (para Sonar) -->
-    <coverage processUncoveredFiles="true">
+    <!-- Gera o coverage.xml -->
+    <coverage>
         <report>
             <clover outputFile="coverage.xml"/>
         </report>
